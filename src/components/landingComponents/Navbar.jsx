@@ -1,4 +1,5 @@
 import React from 'react'
+import CustomButton from '../shared/CustomButton'
 
 const Navbar = () => {
   return (
@@ -16,9 +17,8 @@ const Navbar = () => {
                 <a href="/contact">Contact</a>
             </nav>
 
-            <button className='bg-blue-700 px-5 py-1.5 rounded-sm text-white cursor-pointer hover:bg-blue-400'>
-                Login
-            </button>
+            <CustomButton text="Login" color="green" />
+            
 
         </div>
     </header>

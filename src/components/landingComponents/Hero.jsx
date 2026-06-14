@@ -1,0 +1,26 @@
+import React from 'react'
+
+const Hero = () => {
+    return (
+        <section className="relative">
+            <div className="h-[90vh] overflow-hidden flex items-center">
+                <img src="/heroImage.jpg" alt="wanderwise hero" />
+            </div>
+
+            <div className="bg-black opacity-60 h-[90vh] w-full absolute top-0"></div>
+
+            <div className='absolute top-0'>
+                <div className="w-1/2 mx-auto mt-40 text-center">
+                    <h1 className='text-5xl text-white font-bold'>Plan your trip with Wanderwise</h1>
+                    <p className='text-xl text-white font-medium mt-6'>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam nisi, tempore expedita adipisci repudiandae, nostrum esse ipsa provident voluptate ad ab dignissimos? Voluptate aliquam consequatur doloremque officiis quidem nesciunt vitae asperiores rerum quasi, sapiente distinctio quia facere necessitatibus. Repudiandae cum maxime nihil error nisi voluptatem vero enim porro earum suscipit!
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+    )
+}
+
+export default Hero

@@ -36,8 +36,12 @@ const Features = () => {
             {
                 featuresData.map((feature, index)=>{
                     return (
-                        <div>
-                            {feature.title}
+                        <div key={index} className="border border-gray-300 p-4 rounded-lg bg-blue-100">
+                            <feature.icon className='h-10 w-10 text-blue-700 ' />
+
+                            <h3 className="text-xl font-medium my-2">{feature.title}</h3>
+
+                            <p>{feature.description}</p>
                         </div>
                     )
                 })

@@ -3,7 +3,7 @@ import CustomButton from '../shared/CustomButton'
 
 const Hero = () => {
     return (
-        <section className="relative">
+        <section className="relative top-20">
             <div className="h-[90vh] overflow-hidden flex items-center">
                 <img src="/heroImage.jpg" alt="wanderwise hero" className="w-full" />
             </div>
@@ -17,7 +17,9 @@ const Hero = () => {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam nisi, tempore expedita adipisci repudiandae, nostrum esse ipsa provident voluptate ad ab dignissimos? Voluptate aliquam consequatur doloremque officiis quidem nesciunt vitae asperiores rerum quasi, sapiente distinctio quia facere necessitatibus. Repudiandae cum maxime nihil error nisi voluptatem vero enim porro earum suscipit!
                     </p>
 
-                    <CustomButton text="Get Started" link="/login" />
+                    <div className="flex justify-center">
+                        <CustomButton text="Get Started" link="/login" />
+                    </div>
                 </div>
 
             </div>

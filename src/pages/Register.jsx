@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card"
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Eye, EyeClosed } from 'lucide-react'
 
 const formSchema = z.object({
     name: z.string().min(5, "Name should be at least 5 characters."),
@@ -21,10 +23,13 @@ const formSchema = z.object({
     confirmPassword: z.string().min(8, "Password should be at least 8 characters.")
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match.",
-    fields: ["confirmPassword"]
+    path: ["confirmPassword"]
 })
 
 const Register = () => {
+
+    const [show, setShow] = React.useState(false);
+    const [showConfirm, setShowConfirm] = React.useState(false);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -42,13 +47,12 @@ const Register = () => {
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Card className="w-1/3 mx-auto mt-32">
+            <Card className="w-1/4 mx-auto mt-32">
                 <CardHeader>
                     <CardTitle>Register to WanderWise</CardTitle>
                     <CardDescription>Fill your details to create an account</CardDescription>
-                    <CardAction>Card Action</CardAction>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-4">
 
                     <Controller
                         name="name"
@@ -68,7 +72,7 @@ const Register = () => {
                         )}
                     />
 
-                     <Controller
+                    <Controller
                         name="email"
                         control={form.control}
                         render={({ field, fieldState }) => (
@@ -86,46 +90,71 @@ const Register = () => {
                         )}
                     />
 
-                    
-                  <Controller
-                        name="password"
-                        control={form.control}
-                        render={({ field, fieldState }) => (
-                            <Field data-invalid={fieldState.invalid}>
-                                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    type="password"
-                                    placeholder="••••••••"
-                                    aria-invalid={fieldState.invalid}
-                                />
-                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                            </Field>
-                        )}
-                    />
+                    <div className='flex items-end gap-1'>
+                        <Controller
+                            name="password"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        type={show ? "text" : "password"}
+                                        placeholder="••••••••"
+                                        aria-invalid={fieldState.invalid}
+                                    />
 
-                    <Controller
-                        name="confirmPassword"
-                        control={form.control}
-                        render={({ field, fieldState }) => (
-                            <Field data-invalid={fieldState.invalid}>
-                                <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    type="password"
-                                    placeholder="••••••••"
-                                    aria-invalid={fieldState.invalid}
-                                />
-                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                            </Field>
-                        )}
-                    />
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )}
+                        />
+
+                        <Button onClick={() => { setShow(!show) }} type="button" size="icon" variant='outline'>
+                            {
+                                show ? <EyeClosed /> : <Eye />
+                            }
+                        </Button>
+
+                    </div>
+
+
+                    <div className="relative">
+
+                        <Controller
+                            name="confirmPassword"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        type={showConfirm ? "text" : "password"}
+                                        placeholder="••••••••"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )}
+                        />
+
+                        <div className='absolute right-2 bottom-2' onClick={() => { setShowConfirm(!showConfirm) }}>
+                            {
+                                showConfirm ? <EyeClosed size={18} /> : <Eye size={18} />
+                            }
+                        </div>
+
+                    </div>
 
                 </CardContent>
-                <CardFooter>
-                    <p>Card Footer</p>
+                <CardFooter className="block">
+                    <Button type="submit" className="w-full">Register</Button>
+
+                    <div className="mt-2 text-center">
+                        Already have an account? 
+                        <a className="text-blue-500 underline" href="/login">Login</a>
+                    </div>
                 </CardFooter>
             </Card>
 

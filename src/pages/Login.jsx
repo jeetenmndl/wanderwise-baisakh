@@ -15,12 +15,20 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Eye, EyeClosed } from 'lucide-react'
+import api from '@/api/axios'
+import { toast } from 'sonner'
+import useAuth from '@/hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     email: z.string().email("Invalid email address."),
     password: z.string().min(8, "Password should be at least 8 characters."),
 })
+
 const Login = () => {
+
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const [show, setShow] = React.useState(false);
 
@@ -32,8 +40,28 @@ const Login = () => {
         },
     })
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = (formData) => {
+        console.log(formData);
+
+        try {
+            const response = api.post("/auth/login", formData);
+
+            console.log(response);
+            
+            if(response.status === 200){
+                toast.success("Logged in Successfully!");
+
+                const token = response.data.token;
+                login(formData, token);
+
+                navigate("/dashboard");
+            }else{
+                toast.error(response.message || "Login Failed");
+            }
+        } catch (error) {
+            toast.error(error.message || "Login Failed");
+            console.log(error);
+        }
     }
 
     return (

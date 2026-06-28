@@ -15,6 +15,9 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Eye, EyeClosed } from 'lucide-react'
+import api from '@/api/axios'
+import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     name: z.string().min(5, "Name should be at least 5 characters."),
@@ -27,6 +30,8 @@ const formSchema = z.object({
 })
 
 const Register = () => {
+
+    const navigate = useNavigate();
 
     const [show, setShow] = React.useState(false);
     const [showConfirm, setShowConfirm] = React.useState(false);
@@ -43,6 +48,21 @@ const Register = () => {
 
     const onSubmit = (data) => {
         console.log(data);
+
+        const { confirmPassword, ...userData } = data; 
+
+        try {
+            const response = api.post("/auth/register", userData);
+
+            if(response.status === 201){
+                toast.success("Account created successfully");
+                navigate("/login");
+            }else{
+                toast.error(response.message || "Some error occured");
+            }
+        } catch (error) {
+            toast.error(error.message || "Some error occured");
+        }
     }
 
     return (

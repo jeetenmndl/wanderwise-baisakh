@@ -34,6 +34,7 @@ const Register = () => {
     const navigate = useNavigate();
 
     const [show, setShow] = React.useState(false);
+    
     const [showConfirm, setShowConfirm] = React.useState(false);
 
     const form = useForm({

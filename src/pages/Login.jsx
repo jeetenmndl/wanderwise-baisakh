@@ -40,20 +40,20 @@ const Login = () => {
         },
     })
 
-    const onSubmit = (formData) => {
+    const onSubmit = async (formData) => {
         console.log(formData);
 
         try {
-            const response = api.post("/auth/login", formData);
+            const response = await api.post("/auth/login", formData);
 
             console.log(response);
             
             if(response.status === 200){
                 toast.success("Logged in Successfully!");
 
-                const token = response.data.token;
+                const token = response.data.data.token;
                 login(formData, token);
-
+r
                 navigate("/dashboard");
             }else{
                 toast.error(response.message || "Login Failed");

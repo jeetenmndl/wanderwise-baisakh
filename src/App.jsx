@@ -6,6 +6,8 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import useAuth from './hooks/useAuth'
 import { jwtDecode } from 'jwt-decode'
+import AppLayout from './layouts/AppLayout'
+import Dashboard from './pages/Dashboard'
 
 const App = () => {
 
@@ -16,14 +18,29 @@ const App = () => {
       const decodedToken = token ? jwtDecode(token) : null;
       const userId = decodedToken?.userId;
 
+      console.log(decodedToken);
+
       if(!token || !userId){
         logout();
-        <Navigate to="/login" />
+        return <Navigate to="/login" />
       }
 
+       if (decodedToken && decodedToken.exp) {
+        
+        const currentTime = Date.now()/1000;
+
+        if (currentTime > decodedToken?.exp) {
+          logout();
+          return <Navigate to="/login" />;
+        }
+      }
+
+      return <AppLayout />
 
     } catch (error) {
-      
+      console.log(error);
+      logout();
+      return <Navigate to="/login" />
     }
   }
 
@@ -35,6 +52,13 @@ const App = () => {
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        <Route element={<ProtectedRoutes />}>
+
+          <Route path='/dashboard' element={<Dashboard />} />
+
+        </Route>
+
       </Routes>
     </BrowserRouter>
   )

@@ -47,13 +47,13 @@ const Register = () => {
         },
     })
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log(data);
 
         const { confirmPassword, ...userData } = data; 
 
         try {
-            const response = api.post("/auth/register", userData);
+            const response = await api.post("/auth/register", userData);
 
             if(response.status === 201){
                 toast.success("Account created successfully");

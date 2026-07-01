@@ -53,7 +53,7 @@ const Login = () => {
 
                 const token = response.data.data.token;
                 login(formData, token);
-r
+                
                 navigate("/dashboard");
             }else{
                 toast.error(response.message || "Login Failed");

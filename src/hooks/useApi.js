@@ -7,29 +7,29 @@ const useApi = (endpoint, options = {}, deps = []) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect( async () => {
+  useEffect( () => {
     let mounted = true;
     setLoading(true);
 
-    // api(endpoint, options)
-    //   .then((res) => {
-    //     if (mounted) setData(res.data);
-    //   })
-    //   .catch((err) => {
-    //     if (mounted) setError(err);
-    //   })
-    //   .finally(() => {
-    //     if (mounted) setLoading(false);
-    //   });
+    api(endpoint, options)
+      .then((res) => {
+        if (mounted) setData(res.data.data);
+      })
+      .catch((err) => {
+        if (mounted) setError(err);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
 
-    try{
-      const response = await api.get(endpoint, options);
-      if(mounted) setData(response.data);
-    }catch(error){
-      if(mounted) setError(error)
-    }finally{
-      if(mounted) setLoading(false);
-    }
+    // try{
+    //   const response = await api.get(endpoint, options);
+    //   if(mounted) setData(response.data);
+    // }catch(error){
+    //   if(mounted) setError(error)
+    // }finally{
+    //   if(mounted) setLoading(false);
+    // }
 
     return () => {
       mounted = false;

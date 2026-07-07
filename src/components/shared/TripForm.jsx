@@ -35,13 +35,13 @@ const formSchema = z.object({
   budget: budgetSchema,
 })
 
-const TripForm = () => {
+const TripForm = ({tripData}) => {
 
   const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: tripData || {
       title: "",
       description: "",
       startDate: Date.now(),

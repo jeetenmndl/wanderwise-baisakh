@@ -10,6 +10,7 @@ import AppLayout from './layouts/AppLayout'
 import Dashboard from './pages/Dashboard'
 import AddTrip from './pages/trips/AddTrip'
 import Trip from './pages/trips/Trip'
+import EditTrip from './pages/trips/EditTrip'
 
 const App = () => {
 
@@ -61,6 +62,7 @@ const App = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/trips/add' element={<AddTrip />} />
           <Route path="/trips" element={<Trip />} />
+          <Route path="/trips/edit/:tripId" element={<EditTrip />} />
 
         </Route>
 

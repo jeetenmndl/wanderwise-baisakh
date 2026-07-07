@@ -1,5 +1,5 @@
 import useApi from '@/hooks/useApi'
-import { Loader2 } from 'lucide-react';
+import { Ellipsis, Loader2 } from 'lucide-react';
 import React from 'react'
 import {
   Card,
@@ -12,6 +12,15 @@ import {
 } from "@/components/ui/card"
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/lib/formatter';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const Trip = () => {
 
@@ -50,6 +59,22 @@ const Trip = () => {
                       <CardHeader>
                         <CardTitle>{trip.title}</CardTitle>
                         <CardDescription>{formatDate(trip.startDate)}</CardDescription>
+                        <CardAction>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger render={<Button variant="outline" size="icon" />}>
+                              <Ellipsis size={16} />
+                            </DropdownMenuTrigger>
+
+                            <DropdownMenuContent>
+                              <DropdownMenuGroup>
+                                <DropdownMenuItem><a href={`/trips/${trip._id}`}>View</a></DropdownMenuItem>
+                                <DropdownMenuItem><a href={`/trips/edit/${trip._id}`}>Edit</a></DropdownMenuItem>
+                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                              </DropdownMenuGroup>
+                            </DropdownMenuContent>
+
+                          </DropdownMenu>
+                        </CardAction>
                       </CardHeader>
                       <CardContent>
                         <p>Budget: <span>{trip.budget.total}</span></p>
@@ -59,7 +84,7 @@ const Trip = () => {
                         {
                           trip.destinations.map((destination) => {
                             return (
-                              <span className="bg-amber-200 px-2 py-1 rounded-sm text-sm">
+                              <span className="bg-amber-100 px-2 mr-2 py-1 rounded-lg text-sm">
                                 {destination}
                               </span>
                             )

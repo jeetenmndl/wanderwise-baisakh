@@ -44,8 +44,8 @@ const TripForm = ({tripData}) => {
     defaultValues: tripData || {
       title: "",
       description: "",
-      startDate: Date.now(),
-      endDate: Date.now(),
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
       destinations: [" "],
       budget: {
         total: "",
@@ -77,11 +77,31 @@ const TripForm = ({tripData}) => {
     
   }
 
+  const onEdit = async (formData) => {
+    try{
+      const response = await api.patch(`/trips/${tripData._id}`, formData);
+      console.log(response);
+
+      if(response.status === 200){
+        toast.success("Trip updated successfully");
+        navigate("/trips");
+      }else{
+        toast.error(response.message || "Some error occured while updating trip");
+      }
+    }catch(error){
+      toast.error(error.message || "Some error occured while updating trip");
+      console.log(error);
+    }
+    
+  }
+
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="min-h-screen">
+    <form onSubmit={form.handleSubmit( tripData ? onEdit : onSubmit )} className="min-h-screen">
       <Card className="w-1/2 mx-auto mt-40 mb-20">
         <CardHeader>
-          <CardTitle>Create your Trip</CardTitle>
+          <CardTitle>
+            {tripData ? "Edit your trip": "Create a new Trip"}
+          </CardTitle>
           <CardDescription>Fill in the details for your trip</CardDescription>
           <CardAction>Card Action</CardAction>
         </CardHeader>
@@ -232,7 +252,9 @@ const TripForm = ({tripData}) => {
 
         </CardContent>
         <CardFooter>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">
+            {tripData? "Update Trip": "Create Trip"}
+          </Button>
         </CardFooter>
       </Card>
     </form>

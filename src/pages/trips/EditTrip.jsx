@@ -19,9 +19,15 @@ const EditTrip = () => {
         return <div>Error: {error.message}</div>
     }
 
+    const tripData = {
+        ...data,
+        startDate: data.startDate.split("T")[0],
+        endDate: data.endDate.split("T")[0]
+    }
+
   return (
     <div>
-        <TripForm tripData={data} />
+        <TripForm tripData={tripData} />
     </div>
   )
 }

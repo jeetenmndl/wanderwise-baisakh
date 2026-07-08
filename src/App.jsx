@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard'
 import AddTrip from './pages/trips/AddTrip'
 import Trip from './pages/trips/Trip'
 import EditTrip from './pages/trips/EditTrip'
+import TripDetails from './pages/trips/TripDetails'
 
 const App = () => {
 
@@ -63,6 +64,7 @@ const App = () => {
           <Route path='/trips/add' element={<AddTrip />} />
           <Route path="/trips" element={<Trip />} />
           <Route path="/trips/edit/:tripId" element={<EditTrip />} />
+          <Route path="/trips/:tripId" element={<TripDetails />} />
 
         </Route>
 

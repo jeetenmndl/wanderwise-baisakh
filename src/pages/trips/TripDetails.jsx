@@ -1,4 +1,5 @@
 import api from '@/api/axios';
+import InviteForm from '@/components/shared/InviteForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -68,7 +69,7 @@ const TripDetails = () => {
                 {data.budget.spent}
             </div>
 
-            <div>
+            <div className="space-y-4">
                 <Card>
                     <CardHeader>
                         <CardTitle>Add your expense</CardTitle>
@@ -88,6 +89,8 @@ const TripDetails = () => {
                         <Button className={"w-full"} onClick={expenseSubmit} >Add Expense</Button>
                     </CardFooter>
                 </Card>
+
+                <InviteForm />
             </div>
 
         </section>

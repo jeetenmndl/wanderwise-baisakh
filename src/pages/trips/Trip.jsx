@@ -21,15 +21,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import api from '@/api/axios';
+import { toast } from 'sonner';
 
 const Trip = () => {
 
-  const { data, error, loading } = useApi("/trips");
+  const [dependency, setDependency] = React.useState(0);
+
+  const { data, error, loading } = useApi("/trips", {}, [dependency]);
 
   console.log(data);
 
   if (loading) {
     return <Loader2 />
+  }
+
+  const handleDelete = async (tripId) => {
+    try {
+      const response = await api.delete(`/trips/${tripId}`);
+
+      if(response.status === 200){
+        toast.success("Trip deleted successfully");
+        setDependency(dependency + 1);
+      }else{
+        toast.error( response.message || "Error deleting trip");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error( response.message || "Error deleting trip");
+    }
   }
 
   return (
@@ -67,9 +87,9 @@ const Trip = () => {
 
                             <DropdownMenuContent>
                               <DropdownMenuGroup>
-                                <DropdownMenuItem><a href={`/trips/${trip._id}`}>View</a></DropdownMenuItem>
-                                <DropdownMenuItem><a href={`/trips/edit/${trip._id}`}>Edit</a></DropdownMenuItem>
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                <DropdownMenuItem><a className="w-full" href={`/trips/${trip._id}`}>View</a></DropdownMenuItem>
+                                <DropdownMenuItem><a className="w-full" href={`/trips/edit/${trip._id}`}>Edit</a></DropdownMenuItem>
+                                <DropdownMenuItem onClick={()=>{handleDelete(trip._id)}}>Delete</DropdownMenuItem>
                               </DropdownMenuGroup>
                             </DropdownMenuContent>
 

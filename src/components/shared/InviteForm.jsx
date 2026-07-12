@@ -7,6 +7,8 @@ import { Button } from '../ui/button'
 import { Plus } from 'lucide-react'
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
+import api from '@/api/axios'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
     collaboratorEmails: z.array(
@@ -16,7 +18,7 @@ const formSchema = z.object({
 
 
 
-const InviteForm = () => {
+const InviteForm = ({tripId}) => {
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -32,6 +34,19 @@ const InviteForm = () => {
 
     const onSubmit = async (data) => {
         console.log(data)
+        try{
+            const response = await api.post(`/trips/${tripId}/invite`, data);
+
+            if(response.status === 200){
+                toast.success("Invitation sent successfully");
+                form.reset();
+            }else{
+                toast.error( response.message || "Error sending invitation");
+            }
+        }catch(error){
+            console.log(error)
+            toast.error( error.message || "Some error occured");
+        }
     }
 
     return (

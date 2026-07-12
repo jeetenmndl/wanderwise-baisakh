@@ -1,5 +1,6 @@
 import api from '@/api/axios';
 import InviteForm from '@/components/shared/InviteForm';
+import TripInfo from '@/components/shared/TripInfo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -65,8 +66,8 @@ const TripDetails = () => {
     return (
         <section className="px-20 py-4 mt-20 grid grid-cols-4 gap-4">
 
-            <div className="col-span-3 border border-gray-300 rounded-lg p-4 h-80">
-                {data.budget.spent}
+            <div className="col-span-3 border border-gray-300 rounded-lg p-4 min-h-80">
+                <TripInfo trip={data} />
             </div>
 
             <div className="space-y-4">
@@ -90,7 +91,7 @@ const TripDetails = () => {
                     </CardFooter>
                 </Card>
 
-                <InviteForm />
+                <InviteForm tripId={tripId} />
             </div>
 
         </section>

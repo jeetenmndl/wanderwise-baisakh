@@ -21,7 +21,7 @@ const TripDetails = () => {
     const { error, loading, data } = useApi(`/trips/${tripId}`, {}, [dependency]);
 
     if (loading) {
-        return <Loader2 className="animate-spin" />
+        return <Loader2 className="animate-spin mt-40" />
     }
 
     if (error) {

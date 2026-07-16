@@ -47,7 +47,7 @@ const BaggageDetails = () => {
         console.log(formData)
 
         try {
-            const response = await api.post(`/${tripId}/baggages`);
+            const response = await api.post(`/${tripId}/baggages`, formData);
 
             if(response.status == 201){
                 toast.success("Baggage created successfully");

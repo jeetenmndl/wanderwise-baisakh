@@ -28,9 +28,11 @@ const formSchema = z.object({
 
 const BaggageDetails = () => {
 
+    const [dependency, setDependency] = React.useState(0);
+
     const { tripId } = useParams();
 
-    const { data, loading, error } = useApi(`/${tripId}/baggages`);
+    const { data, loading, error } = useApi(`/${tripId}/baggages`, {}, [dependency]);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -43,21 +45,54 @@ const BaggageDetails = () => {
         return <Loader2 className='animate-spin mt-40' />
     }
 
-    const onSubmit = async (formData)=>{
+    const onSubmit = async (formData) => {
         console.log(formData)
 
         try {
             const response = await api.post(`/${tripId}/baggages`, formData);
 
-            if(response.status == 201){
+            if (response.status == 201) {
                 toast.success("Baggage created successfully");
                 form.reset();
-            }else{
-                toast.error( response.message || "Error creating baggage");
+                setDependency(dependency+1);
+            } else {
+                toast.error(response.message || "Error creating baggage");
             }
         } catch (error) {
             console.log(error);
-            toast.error( error.message || "Some error occured");
+            toast.error(error.message || "Some error occured");
+        }
+    }
+
+    const onDelete = async (id) => {
+        try {
+            const response = await api.delete(`/${tripId}/baggages/${id}`);
+
+            if (response.status == 200) {
+                toast.success("Baggage deleted successfully");
+                setDependency(dependency+1);
+            } else {
+                toast.error(response.message || "Error deleting baggage");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message || "Some error occured");
+        }
+    }
+
+    const onCheck = async (id, status, name) => {
+        try {
+            const response = await api.patch(`/${tripId}/baggages/${id}`, {completed: !status, name: name});
+
+            if (response.status == 200) {
+                toast.success("Baggage packed successfully");
+                setDependency(dependency+1);
+            } else {
+                toast.error(response.message || "Error updating baggage");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message || "Some error occured");
         }
     }
 
@@ -105,26 +140,32 @@ const BaggageDetails = () => {
                     </CardAction>
                 </CardHeader>
 
-                <CardContent>
+                <CardContent className={"grid grid-cols-3 gap-4"}>
                     {
                         data.length == 0 ?
                             <div>No baggages for this trip. Add baggage with the help of button above.</div>
                             :
                             data.map((item) => {
-                                <div>
-                                    <div>
-                                        <Checkbox />
-                                        <p>{item.name}</p>
+                                return (
+                                    <div key={item._id} className='flex items-center justify-between border border-gray-100 p-4 rounded-md'>
+                                        <div className='flex gap-2 items-center'>
+                                            <Checkbox 
+                                            onClick={()=>{onCheck(item._id, item.completed, item.name)}} 
+                                            checked={item.completed} />
+                                            <p>{item.name}</p>
+                                        </div>
+                                        <div className='flex gap-2'>
+                                            <Button size='icon' variant='outline'>
+                                                <Edit />
+                                            </Button>
+                                            <Button size='icon' variant='outline'
+                                                onClick={()=>{onDelete(item._id)}}
+                                            >
+                                                <Trash2 />
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <Button size='icon' variant='outline'>
-                                            <Edit />
-                                        </Button>
-                                        <Button size='icon' variant='outline'>
-                                            <Trash2 />
-                                        </Button>
-                                    </div>
-                                </div>
+                                )
                             })
                     }
                 </CardContent>

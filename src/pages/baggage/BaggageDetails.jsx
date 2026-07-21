@@ -85,7 +85,11 @@ const BaggageDetails = () => {
             const response = await api.patch(`/${tripId}/baggages/${id}`, {completed: !status, name: name});
 
             if (response.status == 200) {
-                toast.success("Baggage packed successfully");
+                if(response.data.data.completed){ 
+                    toast.success("Baggage packed successfully");
+                }else{
+                    toast.success("Baggage unpacked successfully!");
+                }
                 setDependency(dependency+1);
             } else {
                 toast.error(response.message || "Error updating baggage");
@@ -104,7 +108,9 @@ const BaggageDetails = () => {
                     <CardDescription>All the items you need for this trip</CardDescription>
                     <CardAction>
                         <Dialog>
-                            <DialogTrigger >Open</DialogTrigger>
+                            <DialogTrigger >
+                                Add Baggage
+                            </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
                                     <DialogTitle>Add Baggage</DialogTitle>
@@ -147,7 +153,7 @@ const BaggageDetails = () => {
                             :
                             data.map((item) => {
                                 return (
-                                    <div key={item._id} className='flex items-center justify-between border border-gray-100 p-4 rounded-md'>
+                                    <div key={item._id} className={` ${item.completed ? "bg-primary/10" : ""} flex items-center justify-between border border-gray-200 p-4 rounded-md`}>
                                         <div className='flex gap-2 items-center'>
                                             <Checkbox 
                                             onClick={()=>{onCheck(item._id, item.completed, item.name)}} 

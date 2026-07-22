@@ -1,8 +1,11 @@
+import ItineraryForm from '@/components/shared/ItineraryForm'
 import React from 'react'
 
 const AddItinerary = () => {
   return (
-    <div>AddItinerary</div>
+    <div>
+      <ItineraryForm />
+    </div>
   )
 }
 

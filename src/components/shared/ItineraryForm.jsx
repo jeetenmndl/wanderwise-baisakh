@@ -2,10 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { CardFooter } from '../ui/card'
+import { Card, CardFooter, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card'
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
+import { Button } from '../ui/button'
 
 const activitySchema = z.object({
     name: z.string().min(5, "Must be atleast 5 characters"),
@@ -97,6 +98,11 @@ const ItineraryForm = () => {
                         )}
                     />
 
+                    <div className='flex items-center justify-between'>
+                        <h3 className='text-lg font-semibold'>Activities</h3>
+                        <Button type="button" onClick={()=>{append({name: "", time: "", notes: [""]})}} variant='outline'>Add Activity</Button>
+                    </div>
+
                     {
                         fields.map((activity, index) => {
                             return (
@@ -111,7 +117,24 @@ const ItineraryForm = () => {
                                                     {...field}
                                                     id={field.name}
                                                     type="text"
-                                                    placeholder="Trip to Bali."
+                                                    placeholder="Visit to beach"
+                                                    aria-invalid={fieldState.invalid}
+                                                />
+                                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                            </Field>
+                                        )}
+                                    />
+                                    <Controller
+                                        name={`activities[${index}].time`}
+                                        control={form.control}
+                                        render={({ field, fieldState }) => (
+                                            <Field data-invalid={fieldState.invalid}>
+                                                <FieldLabel htmlFor={field.name}>Time of activity</FieldLabel>
+                                                <Input
+                                                    {...field}
+                                                    id={field.name}
+                                                    type="text"
+                                                    placeholder="Morning first hour"
                                                     aria-invalid={fieldState.invalid}
                                                 />
                                                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -122,6 +145,23 @@ const ItineraryForm = () => {
                             )
                         })
                     }
+
+                    <Controller
+                        name="date"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>Date of activity</FieldLabel>
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    type="date"
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                            </Field>
+                        )}
+                    />
 
 
 

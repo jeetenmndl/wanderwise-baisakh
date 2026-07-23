@@ -7,6 +7,9 @@ import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
+import api from '@/api/axios'
+import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const activitySchema = z.object({
     name: z.string().min(5, "Must be atleast 5 characters"),
@@ -130,8 +133,24 @@ const ItineraryForm = () => {
         name: "activities"
     })
 
+    const { tripId } = useParams();
+    const navigate = useNavigate();
+
     const onSubmit = async (data) => {
-        console.log(data)
+        console.log(data);
+
+        try{
+            const response = await api.post(`/${tripId}/itineraries`, data);
+
+            if(response.status === 201){
+                toast.success("Itinerary Created Successfully");
+                navigate("/itinerary");
+            }else{
+                toast.error( response.message || "Error creating itinerary");
+            }
+        }catch(error){
+            toast.error( error.message || "Some error occured");
+        }
     }
 
 
@@ -221,7 +240,7 @@ const ItineraryForm = () => {
 
                 </CardContent>
                 <CardFooter>
-
+                        <Button type="submit">Submit</Button>
                 </CardFooter>
             </Card>
         </form>

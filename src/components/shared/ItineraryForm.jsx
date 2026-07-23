@@ -23,6 +23,90 @@ const formSchema = z.object({
     date: z.coerce.date()
 })
 
+const ActivityItem = ({ activityIndex, control, onRemove }) => {
+    const { fields: noteFields, append: appendNote, remove: removeNote } = useFieldArray({
+        control,
+        name: `activities[${activityIndex}].notes`
+    })
+
+    return (
+        <div className='border border-gray-200 p-4 rounded space-y-4'>
+            <div className='flex items-center justify-between'>
+                <h4 className='text-sm font-semibold'>Activity {activityIndex + 1}</h4>
+                <Button type="button" variant='outline' size='sm' onClick={onRemove}>Remove Activity</Button>
+            </div>
+
+            <Controller
+                name={`activities[${activityIndex}].name`}
+                control={control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Name of activity</FieldLabel>
+                        <Input
+                            {...field}
+                            id={field.name}
+                            type="text"
+                            placeholder="Visit to beach"
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    </Field>
+                )}
+            />
+
+            <Controller
+                name={`activities[${activityIndex}].time`}
+                control={control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Time of activity</FieldLabel>
+                        <Input
+                            {...field}
+                            id={field.name}
+                            type="text"
+                            placeholder="Morning first hour"
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    </Field>
+                )}
+            />
+
+            <div className='border border-gray-100 rounded p-3 space-y-3'>
+                <div className='flex items-center justify-between'>
+                    <h5 className='text-sm font-medium'>Notes</h5>
+                    <Button type="button" variant='secondary' size='sm' onClick={() => appendNote("")}>Add Note</Button>
+                </div>
+
+                {noteFields.map((note, noteIndex) => (
+                    <div key={note.id} className='flex items-start gap-2'>
+                        <div className='flex-1'>
+                            <Controller
+                                name={`activities[${activityIndex}].notes[${noteIndex}]`}
+                                control={control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor={field.name}>Note {noteIndex + 1}</FieldLabel>
+                                        <Input
+                                            {...field}
+                                            id={field.name}
+                                            type="text"
+                                            placeholder="Add a note"
+                                            aria-invalid={fieldState.invalid}
+                                        />
+                                        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                    </Field>
+                                )}
+                            />
+                        </div>
+                        <Button type="button" variant='ghost' size='sm' onClick={() => removeNote(noteIndex)} className='mt-8'>Remove</Button>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
 const ItineraryForm = () => {
 
     const form = useForm({
@@ -106,42 +190,12 @@ const ItineraryForm = () => {
                     {
                         fields.map((activity, index) => {
                             return (
-                                <div key={index} className='border border-gray-200 p-4 rounded'>
-                                    <Controller
-                                        name={`activities[${index}].name`}
-                                        control={form.control}
-                                        render={({ field, fieldState }) => (
-                                            <Field data-invalid={fieldState.invalid}>
-                                                <FieldLabel htmlFor={field.name}>Name of activity</FieldLabel>
-                                                <Input
-                                                    {...field}
-                                                    id={field.name}
-                                                    type="text"
-                                                    placeholder="Visit to beach"
-                                                    aria-invalid={fieldState.invalid}
-                                                />
-                                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                                            </Field>
-                                        )}
-                                    />
-                                    <Controller
-                                        name={`activities[${index}].time`}
-                                        control={form.control}
-                                        render={({ field, fieldState }) => (
-                                            <Field data-invalid={fieldState.invalid}>
-                                                <FieldLabel htmlFor={field.name}>Time of activity</FieldLabel>
-                                                <Input
-                                                    {...field}
-                                                    id={field.name}
-                                                    type="text"
-                                                    placeholder="Morning first hour"
-                                                    aria-invalid={fieldState.invalid}
-                                                />
-                                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                                            </Field>
-                                        )}
-                                    />
-                                </div>
+                                <ActivityItem
+                                    key={activity.id}
+                                    activityIndex={index}
+                                    control={form.control}
+                                    onRemove={() => remove(index)}
+                                />
                             )
                         })
                     }
